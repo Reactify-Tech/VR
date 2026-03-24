@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 105652776}
   - component: {fileID: 105652775}
   m_Layer: 0
-  m_Name: Cylinder (10)
+  m_Name: Moveable-Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,11 +261,11 @@ Transform:
   m_GameObject: {fileID: 105652773}
   serializedVersion: 2
   m_LocalRotation: {x: -0.0022118336, y: 0.15491454, z: 0.9740383, w: 0.16506365}
-  m_LocalPosition: {x: 7.36, y: 2.55, z: 1.03}
-  m_LocalScale: {x: 1, y: 1.4951079, z: 1}
+  m_LocalPosition: {x: 12.47485, y: 4.9608793, z: -17.323664}
+  m_LocalScale: {x: 0.85858005, y: 1.28367, z: 0.85858}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1988270560}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -17.609, y: 2.816, z: 160.327}
 --- !u!136 &105652775
 CapsuleCollider:
@@ -6976,7 +6976,6 @@ Transform:
   - {fileID: 1968963606}
   - {fileID: 1696186814}
   - {fileID: 346972457}
-  - {fileID: 105652774}
   - {fileID: 1046280452}
   - {fileID: 951242422}
   - {fileID: 1511848009}
@@ -7799,5 +7798,6 @@ SceneRoots:
   - {fileID: 2065831889}
   - {fileID: 3076166411467739890}
   - {fileID: 1577032164}
+  - {fileID: 105652774}
   - {fileID: 1988270560}
   - {fileID: 2006719390}
