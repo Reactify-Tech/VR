@@ -2,37 +2,46 @@ using UnityEngine;
 
 public class PlatformMover : MonoBehaviour
 {
-    public Vector3 raisedPosition;
+    [Header("Movement")]
+    public Transform raisedTarget;
     public float speed = 2f;
+    public bool returnWhenItemRemoved = false;
 
-    private Vector3 startPosition;
-    private bool isMovingUp = false;
+    private Vector3 _startPosition;
+    private bool _moveUp = false;
 
-    void Start()
+    private void Start()
     {
-        startPosition = transform.position;
+        _startPosition = transform.position;
+        if (raisedTarget == null)
+        {
+            Debug.LogError("PlatformMover: Raised Target is not assigned.", this);
+        }
+    }
+
+    void Update()
+    {
+        if (raisedTarget == null) 
+        return;
+
+        Vector3 targetPosition = _moveUp ? raisedTarget.position : _startPosition;
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
     }
 
     public void ActivatePlatform()
     {
-        isMovingUp = true;
+        Debug.Log("PlatformMover: ActivatePlatform called.", this);
+        _moveUp = true;
     }
 
     public void DeactivatePlatform()
     {
-        isMovingUp = false;
-    }
+        Debug.Log("PlatformMover: DeactivatePlatform called.", this);
 
-    private void Update()
-    {
-        if (isMovingUp)
+        if (returnWhenItemRemoved)
         {
-            transform.position = Vector3.MoveTowards(transform.position, raisedPosition, speed * Time.deltaTime);
-        }
-        else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, speed * Time.deltaTime);
+            _moveUp = false;
         }
     }
 }
-

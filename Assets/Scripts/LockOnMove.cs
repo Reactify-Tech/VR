@@ -1,27 +1,32 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
+
 
 public class LockOnPlace : MonoBehaviour
 {
-    private XRGrabInteractable grab;
+    private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable _grabInteractable;
+    private Rigidbody _rb;
 
-    void Awake()
+    private void Awake()
     {
-        grab = GetComponent<XRGrabInteractable>();
+        _grabInteractable = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+        _rb = GetComponent<Rigidbody>();
     }
 
-    public void Lock()
+    public void LockItem()
     {
-        if (grab != null)
+        Debug.Log("LockOnPlace: LockItem called on " + gameObject.name, this);
+
+        if (_rb != null)
         {
-            grab.enabled = false;
+            _rb.isKinematic = true;
+            _rb.useGravity = false;
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
         }
 
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
+        if (_grabInteractable != null)
         {
-            rb.isKinematic = true;
+            _grabInteractable.enabled = false;
         }
     }
 }

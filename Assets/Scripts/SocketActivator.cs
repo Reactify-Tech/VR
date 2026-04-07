@@ -1,53 +1,90 @@
-using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class SocketActivator : MonoBehaviour
 {
+    [Header("Required Components")]
     public PlatformMover platform;
     public string requiredTag = "KeyItem";
 
-    private XRSocketInteractor socket;
+    [Header("Optional")]
+    public bool lockItemInPlace = true;
 
-    void Awake()
+    private XRSocketInteractor _socket;
+
+    private void Awake()
     {
-        socket = GetComponent<XRSocketInteractor>();
+        _socket = GetComponent<XRSocketInteractor>();
+        if (_socket == null)
+        {
+            Debug.LogError("SocketActivator: No XRSocketInteractor found on this GameObject.", this);
+        }
 
+        if (platform == null)
+        {
+            Debug.LogError("SocketActivator: No PlatformMover assigned.", this);
+        }
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
-        socket.selectEntered.AddListener(OnItemPlaced);
-        socket.selectExited.AddListener(OnItemRemoved);
+        if (_socket != null)
+        {
+            _socket.selectEntered.AddListener(OnItemPlaced);
+            _socket.selectExited.AddListener(OnItemRemoved);
+        }
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        socket.selectEntered.RemoveListener(OnItemPlaced);
-        socket.selectExited.RemoveListener(OnItemRemoved);
+        if (_socket != null)
+        {
+            _socket.selectEntered.RemoveListener(OnItemPlaced);
+            _socket.selectExited.RemoveListener(OnItemRemoved);
+        }
     }
-    
+
     private void OnItemPlaced(SelectEnterEventArgs args)
     {
-        Debug.Log("ITEM PLACED IN SOCKET");
+        Transform itemTransform = args.interactableObject.transform;
 
-        if (args.interactableObject.transform.CompareTag(requiredTag))
+        Debug.Log("SocketActivator: Item placed in socket: " + itemTransform.name, this);
+
+        if (!itemTransform.CompareTag(requiredTag))
         {
-            Debug.Log("CORRECT ITEM PLACED, ACTIVATING PLATFORM");
-            platform.ActivatePlatform();
+            Debug.Log("SocketActivator: Placed item does not have the required tag: " + requiredTag, this);
+            return;
+        }
 
-            LockOnPlace lockScript = args.interactableObject.transform.GetComponent<LockOnPlace>();
+        Debug.Log("SocketActivator: Placed item has the required tag. Activating platform.", this);
+
+        if (lockItemInPlace)
+        {
+            LockOnPlace lockScript = itemTransform.GetComponent<LockOnPlace>();
             if (lockScript != null)
             {
-                lockScript.Lock();
+                lockScript.LockItem();
             }
+        }
+
+        if (platform != null)
+        {
+            platform.ActivatePlatform();
         }
     }
 
     private void OnItemRemoved(SelectExitEventArgs args)
     {
-        if (args.interactableObject.transform.CompareTag(requiredTag))
+        Transform itemTransform = args.interactableObject.transform;
+
+        Debug.Log("SocketActivator: Item removed from socket: " + itemTransform.name, this);
+
+        if (!itemTransform.CompareTag(requiredTag))
+            return;
+
+        if (platform != null)
         {
             platform.DeactivatePlatform();
         }
