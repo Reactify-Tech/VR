@@ -7,7 +7,6 @@ TagManager:
   - Anchor
   - KeyItem
   - Recyclable
-  - PlayerHand
   layers:
   - Default
   - TransparentFX
