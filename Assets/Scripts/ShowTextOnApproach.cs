@@ -3,6 +3,7 @@ using UnityEngine;
 public class ShowTextOnApproach : MonoBehaviour
 {
     [SerializeField] private GameObject textBox;
+    [SerializeField] private AudioSource audioCue;
 
     private void Start()
     {
@@ -14,6 +15,7 @@ public class ShowTextOnApproach : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             textBox.SetActive(true);
+            audioCue.Play();
         }
     }
 
